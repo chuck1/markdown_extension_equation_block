@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import markdown
-from markdown_extension_blockmod import MyExtension
+from markdown_extension_equation_block import MyExtension
 
 r = '?\n- hi\n- hi'
 
