@@ -6,11 +6,17 @@ import json
 
 class MyBlockParser(BlockProcessor):
 	
-	RE = re.compile("^\\\\\\\\\\[(.*\n.*)*\\\\\\\\\\]$")
+	RE  = re.compile("^([\w_]+\n)?(\\\\\\\\\\[(.*\n.*)*\\\\\\\\\\])$")
+	RE1 = re.compile("^([\w_]+\\n)?(\\\\\\\\\\[(.*\\n.*)*\\\\\\\\\\])$")
 	
+        def __init__(self, parser):
+            super(MyBlockParser, self).__init__(parser)
+            self.mycount = 0
+
 	def test(self, parent, block):
                 b = bool(self.RE.search(block))
-		print 'test',repr(block), b
+                b1 = bool(self.RE1.search(block))
+		print 'test',repr(block), b, b1
 		return b
 		
 	def run(self, parent, blocks):
@@ -19,13 +25,18 @@ class MyBlockParser(BlockProcessor):
 		#print 'state', self.parser.state
 
                 raw_block = blocks.pop(0)
+
+                m = self.RE.match(raw_block)
                 
+                
+                print "label", repr(m.group(1))
+                print "eq   ", repr(m.group(2))
+
                 """
 
                 class_name = 'question'
 
 		
-		m = self.RE.search(raw_block)
 
                 if m.group(1):
                     j = json.loads(m.group(1))
@@ -36,16 +47,28 @@ class MyBlockParser(BlockProcessor):
 		
 		#print 'm', m.start(), m.end()
 		
-		div = etree.SubElement(parent, 'div')
-                div.attrib['class'] = class_name
-		#print div.attrib
-		
-		self.parser.parseBlocks(div, [raw_block[m.end():]])
-		#blocks.insert(0, raw_block[m.end():])
 		
                 """
+		tab = etree.SubElement(parent, 'table')
+                tab.attrib['class'] = 'equation'
+		
+       		tr = etree.SubElement(tab, 'tr')
+       		td0 = etree.SubElement(tr, 'td')
+       		td1 = etree.SubElement(tr, 'td')
+                td0.text = m.group(2)
 
-		return False
+                self.mycount += 1
+                td1.text = str(self.mycount)
+                if m.group(1):
+                    td1.attrib['id'] = "eq_" + m.group(1)[:-1]
+                #print div.attrib
+		
+		#self.parser.parseBlocks(div, [raw_block[m.end():]])
+		#blocks.insert(0, raw_block[m.end():])
+                
+                #self.parser.state.reset()
+
+		#return True
 
 class MyExtension(Extension):
 	def extendMarkdown(self, md, md_globals):
