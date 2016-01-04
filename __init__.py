@@ -16,21 +16,20 @@ class MyBlockParser(BlockProcessor):
 	def test(self, parent, block):
                 b = bool(self.RE.search(block))
                 b1 = bool(self.RE1.search(block))
-		print 'test',repr(block), b, b1
+		#print 'test',repr(block), b, b1
 		return b
 		
 	def run(self, parent, blocks):
-		print
-		print 'run', repr(blocks)
+		#print
+		#print 'run', repr(blocks)
 		#print 'state', self.parser.state
 
                 raw_block = blocks.pop(0)
 
                 m = self.RE.match(raw_block)
                 
-                
-                print "label", repr(m.group(1))
-                print "eq   ", repr(m.group(2))
+                #print "label", repr(m.group(1))
+                #print "eq   ", repr(m.group(2))
 
                 """
 
@@ -46,7 +45,7 @@ class MyBlockParser(BlockProcessor):
                     except: pass
 		
 		#print 'm', m.start(), m.end()
-		
+	
 		
                 """
 		tab = etree.SubElement(parent, 'table')
